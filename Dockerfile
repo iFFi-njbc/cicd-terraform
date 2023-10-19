@@ -44,27 +44,32 @@
 
 #------------------------------------------------------------------------------------------
 # Use a specific OpenJDK 11 base image for building
-FROM openjdk AS builder
+# Use a specific Maven image as the build stage
+FROM maven AS build
 
 # Set the working directory in the container
-WORKDIR /app
+WORKDIR /usr/src/app
 
-# Copy the project files into the container
-COPY . .
-# Set execution permissions for the Maven Wrapper script
-RUN chmod +x mvnw
+# Copy the source code and the POM file
+COPY src /usr/src/app/src
+COPY pom.xml /usr/src/app
+
 # Build the JAR file
-RUN ./mvnw clean package
+RUN mvn -f /usr/src/app/pom.xml clean package
 
-# Use a smaller base image for the runtime
+# Use a smaller OpenJDK 14 image for the runtime
 FROM openjdk
 
 # Set the working directory in the container
-WORKDIR /app
+WORKDIR /usr/app
 
-# Copy the JAR file from the builder stage into the runtime image
-COPY --from=builder /app/target/springrestapi-0.0.1-SNAPSHOT.jar /app/
+# Copy the JAR file from the build stage into the runtime image
+COPY --from=build /usr/src/app/target/springrestapi-0.0.1-SNAPSHOT.jar /usr/app/
 
-# Command to run the application
-CMD ["java", "-jar", "springrestapi-0.0.1-SNAPSHOT.jar"]
+# Expose port 8080
+EXPOSE 8080
+
+# Specify the command to run the application
+ENTRYPOINT ["java", "-jar", "springrestapi-0.0.1-SNAPSHOT.jar"]
+
 
