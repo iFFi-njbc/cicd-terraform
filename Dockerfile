@@ -51,7 +51,8 @@ WORKDIR /app
 
 # Copy the project files into the container
 COPY . .
-
+# Set execution permissions for the Maven Wrapper script
+RUN chmod +x mvnw
 # Build the JAR file
 RUN ./mvnw clean package
 
