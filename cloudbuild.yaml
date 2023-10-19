@@ -7,8 +7,14 @@ steps:
 - name: 'gcr.io/cloud-builders/docker'
   args: ['push', 'gcr.io/$PROJECT_ID/${_SERVICE_NAME}:${SHORT_SHA}']
   id: Pushing the image to registry
+# # Deploy container image to Cloud Run
+# - name: 'gcr.io/cloud-builders/gcloud'
+#   args: ['run', 'deploy', '${_SERVICE_NAME}', '--image', 'gcr.io/$PROJECT_ID/${_SERVICE_NAME}:${SHORT_SHA}', '--region', 'us-central1', '--platform', 'managed', "--allow-unauthenticated"]
+
 # Deploy container image to Cloud Run
-- name: 'gcr.io/cloud-builders/gcloud'
-  args: ['run', 'deploy', '${_SERVICE_NAME}', '--image', 'gcr.io/$PROJECT_ID/${_SERVICE_NAME}:${SHORT_SHA}', '--region', 'us-central1', '--platform', 'managed', "--allow-unauthenticated"]
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  entrypoint: gcloud
+  args: ['run', 'deploy', '${_SERVICE_NAME}', '--image', 'gcr.io/$PROJECT_ID/${_SERVICE_NAME}:${SHORT_SHA}', '--region', 'us-central1']
+
 options:
   logging: CLOUD_LOGGING_ONLY

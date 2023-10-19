@@ -29,7 +29,7 @@
 # CMD ["java", "-jar", "*.jar"]
 
 # Use a specific OpenJDK 11 base image
-FROM openjdk:11
+FROM openjdk
 
 # Set the working directory in the container
 WORKDIR /app
