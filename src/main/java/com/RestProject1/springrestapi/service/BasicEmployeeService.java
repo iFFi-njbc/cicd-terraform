@@ -181,6 +181,11 @@ public class BasicEmployeeService implements EmployeeService{
 	    session.disableFilter("deletedEmployeeFilter");
 	    return users;
 	}
+
+	public List<Employee> getEmployeesByName(String name)
+	{
+		return empRepository.findByName(name);
+	}
 	
 	
 /*	public Employee dtoToEmp(EmployeeDTO dto)

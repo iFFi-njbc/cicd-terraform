@@ -11,5 +11,6 @@ import com.RestProject1.springrestapi.model.Employee;
 public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 
 	List<Employee> findByNameAndLocation(String name, String location);
+	List<Employee> findByName(String name);
 
 }

@@ -15,4 +15,5 @@ public interface DepartmentService {
 	
 	public List<Employee> getEmployees(Long id);
 	List<Department> getDepartmentsByName(String name);
+
 }
