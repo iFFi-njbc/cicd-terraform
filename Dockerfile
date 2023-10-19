@@ -28,14 +28,42 @@
 # # Command to run the application
 # CMD ["java", "-jar", "*.jar"]
 
-# Use a specific OpenJDK 11 base image
+#------------------------------------------------------------------------------------------
+
+# # Use a specific OpenJDK 11 base image
+# FROM openjdk
+
+# # Set the working directory in the container
+# WORKDIR /app
+
+# # Copy the JAR file into the container at /app
+# COPY ./target/springrestapi-0.0.1-SNAPSHOT.jar /app/
+
+# # Command to run the application
+# CMD ["java", "-jar", "springrestapi-0.0.1-SNAPSHOT.jar"]
+
+#------------------------------------------------------------------------------------------
+# Use a specific OpenJDK 11 base image for building
+FROM openjdk AS builder
+
+# Set the working directory in the container
+WORKDIR /app
+
+# Copy the project files into the container
+COPY . .
+
+# Build the JAR file
+RUN ./mvnw clean package
+
+# Use a smaller base image for the runtime
 FROM openjdk
 
 # Set the working directory in the container
 WORKDIR /app
 
-# Copy the JAR file into the container at /app
-COPY ./target/springrestapi-0.0.1-SNAPSHOT.jar /app/
+# Copy the JAR file from the builder stage into the runtime image
+COPY --from=builder /app/target/springrestapi-0.0.1-SNAPSHOT.jar /app/
 
 # Command to run the application
 CMD ["java", "-jar", "springrestapi-0.0.1-SNAPSHOT.jar"]
+
