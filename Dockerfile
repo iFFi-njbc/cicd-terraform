@@ -10,8 +10,11 @@ COPY pom.xml .
 # Copy the entire application source code
 COPY src ./src
 
-# Build the application
-RUN mvn clean package
+# Print Maven version for debugging
+RUN mvn --version
+
+# Build the application with full debug logging
+RUN mvn clean package -X
 
 # Use a smaller OpenJDK 11 base image for the final stage
 FROM openjdk
