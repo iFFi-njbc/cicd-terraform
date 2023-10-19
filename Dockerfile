@@ -1,17 +1,14 @@
-# Use an official OpenJDK base image
+# Use the official OpenJDK base image
 FROM openjdk
 
 # Set the working directory in the container
 WORKDIR /app
 
-# Copy the Maven executable JAR file and the POM file
-COPY target/*.jar /app/app.jar
+# Copy the JAR file into the container at /app
+COPY ./target/springrestapi-0.0.1-SNAPSHOT.jar /app/
 
-# Grant execute permissions to the Maven wrapper script
-RUN chmod +x mvnw
-
-# Expose the port that the application will run on
+# Expose the port that the app will run on
 EXPOSE 8080
 
-# Entry point command to run the application
+# Command to run the application
 CMD ["java", "-jar", "springrestapi-0.0.1-SNAPSHOT.jar"]
