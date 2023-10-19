@@ -43,33 +43,22 @@
 # CMD ["java", "-jar", "springrestapi-0.0.1-SNAPSHOT.jar"]
 
 #------------------------------------------------------------------------------------------
-# Use a specific OpenJDK 11 base image for building
-# Use a specific Maven image as the build stage
-FROM maven AS build
+FROM maven:3.8.5-jdk-11 as maven
 
-# Set the working directory in the container
-WORKDIR /usr/src/app
+COPY ./pom.xml ./pom.xml
 
-# Copy the source code and the POM file
-COPY src /usr/src/app/src
-COPY pom.xml /usr/src/app
+COPY ./src ./src
 
-# Build the JAR file
-RUN mvn -f /usr/src/app/pom.xml clean package
+RUN mvn dependency:go-offline -B
 
-# Use a smaller OpenJDK 14 image for the runtime
+RUN mvn package
+
 FROM openjdk
 
-# Set the working directory in the container
-WORKDIR /usr/app
+WORKDIR /app
 
-# Copy the JAR file from the build stage into the runtime image
-COPY --from=build /usr/src/app/target/springrestapi-0.0.1-SNAPSHOT.jar /usr/app/
+COPY --from=maven target/springrestapi-0.0.1-SNAPSHOT.jar ./SimpleJavaProject.jar
 
-# Expose port 8080
-EXPOSE 8080
-
-# Specify the command to run the application
-ENTRYPOINT ["java", "-jar", "springrestapi-0.0.1-SNAPSHOT.jar"]
+CMD ["java", "-jar", "./app/SimpleJavaProject.jar"]
 
 
