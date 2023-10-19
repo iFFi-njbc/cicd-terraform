@@ -1,5 +1,5 @@
-# Use a specific Maven and OpenJDK 11 base image for the build stage
-FROM maven AS build
+# Use a specific Maven and OpenJDK 14 base image for the build stage
+FROM maven:3.8.4-openjdk-14 AS build
 
 # Set the working directory in the container
 WORKDIR /app
@@ -10,14 +10,11 @@ COPY pom.xml .
 # Copy the entire application source code
 COPY src ./src
 
-# Print Maven version for debugging
-RUN mvn --version
+# Build the application
+RUN mvn clean package
 
-# Build the application with full debug logging
-RUN mvn clean package -X
-
-# Use a smaller OpenJDK 11 base image for the final stage
-FROM openjdk
+# Use a smaller OpenJDK 14 base image for the final stage
+FROM openjdk:14-slim
 
 # Set the working directory in the container
 WORKDIR /app
