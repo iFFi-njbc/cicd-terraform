@@ -1,10 +1,10 @@
 HELP.md
 !.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
+
 
 # Include only the specific JAR file
 !target/springrestapi-0.0.1-SNAPSHOT.jar
+
 
 ### STS ###
 .apt_generated
