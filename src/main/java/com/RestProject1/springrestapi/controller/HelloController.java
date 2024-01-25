@@ -18,4 +18,14 @@ public class HelloController {
     {
         return new ResponseEntity<>("Hello to my application !!!", HttpStatus.OK);
     }
+
+
+    @GetMapping("/hello2")
+    @ApiOperation(value = "Hello to new changes !!! ")
+    public ResponseEntity<?> hello2()
+    {
+        return new ResponseEntity<>("Hello to the new changes !!!", HttpStatus.OK);
+    }
+
+
 }
